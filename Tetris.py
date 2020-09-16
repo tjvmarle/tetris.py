@@ -26,6 +26,7 @@ countdown = 120
 
 running = True
 while running:
+    # Make a feature branch
     # Start the main-game module here
     # Add butten handling --> Esc == quit
     # Check ordering of drawing element, can it be simplified?
