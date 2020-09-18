@@ -30,6 +30,7 @@ while running:
     # Start the main-game module here
     # Add butten handling --> Esc == quit
     # Check ordering of drawing element, can it be simplified?
+    # Testing from laptop
 
     grid.draw(10, 24, 1, (51, 51, 51))
 
