@@ -26,6 +26,9 @@ class GridDrawer:
 
     def getSurfaceSize(self):
         return self.surface.get_size()
+
+    def getGridSize(self):
+        return (self.x_nr, self.y_nr)
     
     def draw(self):
         x, y = self.surface.get_size()

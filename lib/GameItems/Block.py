@@ -1,5 +1,6 @@
 import pygame
 
+#TODO: this can probably be deprecated/move to Gridblock
 class Block:
 
     def __init__(self, surf, x_pos, y_pos, width):
