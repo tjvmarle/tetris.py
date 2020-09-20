@@ -2,11 +2,6 @@ import pygame
 
 #TODO: Maybe change into a rectangle-drawer and inherit a square-drawer from it
 class GridDrawer:
-    # surface = None
-    # x_grid = 0
-    # y_grid = 0
-    # line_thick = 0
-    # line_clr = (0,0,0)
 
     def __init__(self, x_squares, y_squares, square_size, line_thickness, line_color):
         self.surface = pygame.Surface((x_squares * square_size + line_thickness, y_squares * square_size + line_thickness))
