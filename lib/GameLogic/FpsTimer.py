@@ -14,7 +14,7 @@ class FpsTimer:
         spf = 1 / self.framerate
         wait_time = self.prev_time + spf - curr_time
         self.prev_time += spf  # This prevents fps slowdown due to overhead
-        print("Frame usage:", (1 - wait_time / spf) * 100, "%")
+        # print("Frame usage:", (1 - wait_time / spf) * 100, "%")
 
         if wait_time > 0:
             time.sleep(wait_time)
