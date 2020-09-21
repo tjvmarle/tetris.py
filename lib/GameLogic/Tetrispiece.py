@@ -28,18 +28,35 @@ pieceList = {Piece.I: [(0, 0), (1, 0), (2, 0), (3, 0)],
              Piece.L: [(2, 0), (0, 1), (1, 1), (2, 1)]}
 
 
+class Movement(Enum):
+    left = 0,
+    right = 1,
+    down = 2,
+    bottom = 3,
+
+
 class Tetrispiece:
 
-    def __init__(self, gridManager):
+    def __init__(self, gameManager):
 
         # TODO: Move piece selection to contructor
         self.shape = pieceList[Piece.L]
         self.pos = (4, 0)  # Top mid
         self.surface = None
-        self.gm = gridManager
+        self.gm = gameManager
 
     def setSurface(self, surface):
         self.surface = surface
 
     def draw(self):
         self.gm.drawPiece()
+
+    def move(self, direction):
+        x_pos, y_pos = self.pos
+        if not self.gm.collides(self, (x_pos, y_pos + 1)):
+            self.gm.drawPiece(True)  # First 'undraw' the piece
+            self.pos = (x_pos, y_pos + 1)
+            self.gm.drawPiece()  # Redraw on next position
+        else:
+            print("Collision!!!")
+            # TODO: if moveDown - Deactivate the piece, mark current blocks as passive, insert next piece

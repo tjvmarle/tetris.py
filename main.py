@@ -2,7 +2,7 @@ import pygame
 import time
 from lib.GameLogic.FpsTimer import FpsTimer
 from lib.GameLogic.Grid import GridDrawer
-from lib.GameLogic.Gridmanager import Gridmanager
+from lib.GameLogic.Gridmanager import Gamemanager
 from lib.GameLogic.Tetrispiece import Tetrispiece
 
 from lib.GameItems.Block import Block
@@ -19,7 +19,7 @@ pygame.display.update()
 
 # Traditional tetris is 10 by 20
 grid = GridDrawer(10, 20, 20, 1, (51, 51, 51))
-gm = Gridmanager(grid)
+gm = Gamemanager(grid)
 
 fpsClock = FpsTimer(time.time(), 60)  # running @ 60fps
 
@@ -48,6 +48,9 @@ while running:
                 pass
             elif event.key == pygame.K_ESCAPE:
                 running = False
+
+    if cntr % 15 == 0:
+        gm.tick()
 
     gm.draw()
 

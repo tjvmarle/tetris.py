@@ -30,6 +30,6 @@ class Gridblock:
             self.status = status
             self.color = color if color else (0, 0, 0)
             self.draw()
-
-        # TODO: draw a square with the right color
+        else:
+            pass
         # TODO: make some logic to add shadows to colored blocks
