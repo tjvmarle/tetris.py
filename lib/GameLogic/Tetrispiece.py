@@ -10,15 +10,6 @@ class Piece(Enum):
     L = 6
 
 
-pieceList = {Piece.I: [(0, 0), (1, 0), (2, 0), (3, 0)],
-             Piece.O: [(0, 0), (0, 1), (1, 0), (1, 1)],
-             Piece.T: [(0, 0), (1, 0), (2, 0), (1, 1)],
-             Piece.S: [(1, 0), (2, 0), (0, 1), (1, 1)],
-             Piece.Z: [(0, 0), (1, 0), (1, 1), (2, 1)],
-             Piece.J: [(0, 0), (0, 1), (1, 1), (2, 1)],
-             Piece.L: [(2, 0), (0, 1), (1, 1), (2, 1)]}
-
-
 class Movement(Enum):
     left = 0,
     right = 1,
@@ -27,12 +18,19 @@ class Movement(Enum):
 
 
 class Tetrispiece:
-
-    def __init__(self, gameManager):
+    __pieceList = {Piece.I: [(0, 0), (1, 0), (2, 0), (3, 0)], 
+            Piece.O: [(0, 0), (0, 1), (1, 0), (1, 1)],
+            Piece.T: [(0, 0), (1, 0), (2, 0), (1, 1)],
+            Piece.S: [(1, 0), (2, 0), (0, 1), (1, 1)],
+            Piece.Z: [(0, 0), (1, 0), (1, 1), (2, 1)],
+            Piece.J: [(0, 0), (0, 1), (1, 1), (2, 1)],
+            Piece.L: [(2, 0), (0, 1), (1, 1), (2, 1)]}
+                
+    def __init__(self, gameManager, shape):
 
         # TODO: Move piece selection to contructor
-        self.shape = pieceList[Piece.L]
-        self.pos = (4, 17) 
+        self.shape = Tetrispiece.__pieceList[Piece.L]
+        self.pos = (4, 12) 
         self.surface = None
         self.gm = gameManager
 
