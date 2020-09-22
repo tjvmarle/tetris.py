@@ -6,7 +6,6 @@ from lib.GameLogic.Tetrispiece import Movement
 
 class Gamemanager:
     # Manages the grid, the blocks, drawing and game logic
-
     def __getBlockList(self, x, y):
         grid = []
         squareX, squareY = self.grid.getBlockSize()
@@ -22,14 +21,21 @@ class Gamemanager:
 
         return grid
 
-    # TODO: create blocks, rows and assign position + size to them
-    # TODO: implement drawing logic
     def __init__(self, grid):
         self.grid = grid
         self.x_nr, self.y_nr = grid.getGridSize()
         self.blockList = self.__getBlockList(self.x_nr, self.y_nr)
         self.active_piece = None
 
+    def deactivatePiece(self, piece):
+        x_pos, y_pos = piece.pos
+        for block_x, block_y in piece.shape:
+            block = self.blockList[block_x + x_pos][block_y + y_pos]
+            block.Status(Blockstatus.passive)
+        
+        self.active_piece = None
+        # TODO: insert next piece --> Make a PieceManager
+    
     def insertPiece(self, piece):
         self.active_piece = piece
         self.active_piece.setSurface(self.grid.surface)
@@ -70,3 +76,5 @@ class Gamemanager:
     def tick(self):  # Not actual fps, equals the game's 'playing speed'
         if self.active_piece:
             self.active_piece.move(Movement.down)
+        
+        self.draw() # Redraw grid to overlay on Tetronimo's

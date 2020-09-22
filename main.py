@@ -28,31 +28,29 @@ cntr = 0
 
 keyBlock = {pygame.K_LEFT, pygame.K_RIGHT, pygame.K_DOWN, pygame.K_SPACE}
 fieldChanged = False
-grid.surface.fill((0, 0, 0))
 
 while running:
     # TODO:
     # Start the main-game module here
-    # Optimize: Only redraw the field if something changed
-    # More optimization: let blocks redraw back to background instead of redrawing entire surface
 
     if cntr == 0:
+        grid.surface.fill((0, 0, 0))
         gm.insertPiece(Tetrispiece(gm))
+        gm.draw()
 
     cntr += 1
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key in keyBlock:
-                # block.doKey(event.key)
+                #TODO: add left, right and space to tetrispieces
+                # Space == moveDown until collision
                 pass
             elif event.key == pygame.K_ESCAPE:
                 running = False
 
-    if cntr % 15 == 0:
+    if cntr % 30 == 0:
         gm.tick()
-
-    gm.draw()
 
     screen.blit(grid.surface, (100, int(
         (screen_y - grid.surface.get_height())/2)))

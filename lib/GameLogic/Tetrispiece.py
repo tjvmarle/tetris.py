@@ -1,14 +1,5 @@
 from enum import Enum
 
-# self.shape = [(0, 0), (0, 1), (0, 2), (0, 3)]  # I piece
-# self.shape = [(0, 0), (0, 1), (1, 0), (1, 1)]  # O piece
-# self.shape = [(0, 0), (0, 1), (0, 2), (1, 1)]  # T piece
-# self.shape = [(1, 0), (2, 0), (0, 1), (0, 2)]  # S piece
-# self.shape = [(0, 0), (1, 0), (1, 1), (1, 2)]  # Z piece
-# self.shape = [(0, 0), (0, 1), (1, 1), (2, 1)]  # J piece
-# self.shape = [(2, 0), (0, 1), (1, 1), (2, 1)]  # L piece
-
-
 class Piece(Enum):
     I = 0
     O = 1
@@ -41,7 +32,7 @@ class Tetrispiece:
 
         # TODO: Move piece selection to contructor
         self.shape = pieceList[Piece.L]
-        self.pos = (4, 0)  # Top mid
+        self.pos = (4, 17) 
         self.surface = None
         self.gm = gameManager
 
@@ -51,12 +42,18 @@ class Tetrispiece:
     def draw(self):
         self.gm.drawPiece()
 
-    def move(self, direction):
+
+    def moveDown(self):
         x_pos, y_pos = self.pos
         if not self.gm.collides(self, (x_pos, y_pos + 1)):
             self.gm.drawPiece(True)  # First 'undraw' the piece
             self.pos = (x_pos, y_pos + 1)
             self.gm.drawPiece()  # Redraw on next position
         else:
-            print("Collision!!!")
-            # TODO: if moveDown - Deactivate the piece, mark current blocks as passive, insert next piece
+            self.gm.deactivatePiece(self)
+    
+    def move(self, direction):
+        if direction == Movement.down:
+            self.moveDown()
+        else:
+            pass
