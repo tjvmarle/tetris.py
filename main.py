@@ -21,25 +21,19 @@ pygame.display.update()
 # Traditional tetris is 10 by 20
 grid = GridDrawer(10, 20, 20, 1, (51, 51, 51))
 gm = Gamemanager(grid)
-pm = PieceManager(gm)
-
 fpsClock = FpsTimer(time.time(), 60)  # running @ 60fps
 
 running = True
 cntr = 0
 
 keyBlock = {pygame.K_LEFT, pygame.K_RIGHT, pygame.K_DOWN, pygame.K_SPACE}
-fieldChanged = False
 
+grid.surface.fill((0, 0, 0))
+gm.insertNextPiece()
+gm.drawAll()
 
 while running:
-    # TODO:
-    # Start the main-game module here
-
-    if cntr == 0:
-        grid.surface.fill((0, 0, 0))
-        gm.insertPiece(pm.giveNextPiece())
-        gm.draw()
+    # TODO: Start the main-game module here
 
     cntr += 1
 
@@ -52,7 +46,7 @@ while running:
             elif event.key == pygame.K_ESCAPE:
                 running = False
 
-    if cntr % 30 == 0:
+    if cntr % 10 == 0:
         gm.tick()
 
     screen.blit(grid.surface, (100, int(

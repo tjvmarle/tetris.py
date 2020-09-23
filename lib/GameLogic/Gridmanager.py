@@ -2,10 +2,14 @@ import pygame
 from lib.GameLogic.Gridblock import Gridblock
 from lib.GameLogic.Gridblock import Blockstatus
 from lib.GameLogic.Tetrispiece import Movement
+from lib.GameLogic.PieceManager import PieceManager
 
 
 class Gamemanager:
     # Manages the grid, the blocks, drawing and game logic
+
+    #Index the playing field
+    #TODO: There was some kind of Python annotation syntax
     def __getBlockList(self, x, y):
         grid = []
         squareX, squareY = self.grid.getBlockSize()
@@ -26,6 +30,8 @@ class Gamemanager:
         self.x_nr, self.y_nr = grid.getGridSize()
         self.blockList = self.__getBlockList(self.x_nr, self.y_nr)
         self.active_piece = None
+        self.pm = PieceManager(self)
+        self.insertNextPiece()
 
     def deactivatePiece(self, piece):
         x_pos, y_pos = piece.pos
@@ -34,25 +40,23 @@ class Gamemanager:
             block.Status(Blockstatus.passive)
         
         self.active_piece = None
-        # TODO: insert next piece --> Make a PieceManager
+        self.insertNextPiece()
     
-    def insertPiece(self, piece):
-        self.active_piece = piece
+    def insertNextPiece(self):
+        #TODO: Check for collision at insertion == game lost
+        self.active_piece = self.pm.giveNextPiece()
         self.active_piece.setSurface(self.grid.surface)
-        self.active_piece.draw()
 
+    #TODO: Delegate implementation to the piece itself
     def drawPiece(self, undraw=False):
         x_pos, y_pos = self.active_piece.pos
         for x_shape, y_shape in self.active_piece.shape:
             block = self.blockList[x_shape + x_pos][y_shape + y_pos]
 
             if not undraw:
-                block.Status(Blockstatus.active, (255, 0, 0))
+                block.Status(Blockstatus.active, self.active_piece.clr)
             else:
                 block.Status(Blockstatus.empty, (0, 0, 0))
-
-    def draw(self):
-        self.grid.draw()  # Overlay the grid lines
 
     def collides(self, piece, nextPos):
         for x_block, y_block in piece.shape:
@@ -66,15 +70,19 @@ class Gamemanager:
             if x_pos <= -1 or x_pos >= self.x_nr:  # Hit the sides
                 return True
 
-            gmBlock = self.blockList[x_pos][y_pos]
+            collidingBlock = self.blockList[x_pos][y_pos]
 
-            if gmBlock.status == Blockstatus.passive:  # Ignore active blocks or you might collide with yourself
+            if collidingBlock.status == Blockstatus.passive:  # Ignore active blocks or you might collide with yourself
                 return True
 
         return False
+
+    def drawAll(self):
+        self.drawPiece()
+        self.grid.draw()  # Overlay the grid lines
 
     def tick(self):  # Not actual fps, equals the game's 'playing speed'
         if self.active_piece:
             self.active_piece.move(Movement.down)
         
-        self.draw() # Redraw grid to overlay on Tetronimo's
+        self.drawAll()
