@@ -20,10 +20,12 @@ class PieceManager:
     def giveNextPiece(self):
         nextShape = self.bag[self.nextIndex]
         if self.nextIndex + 1 < len(PieceManager.__shapeMap):
+            print("Currentindex: ", self.nextIndex)
             self.nextIndex += 1
         else:
             self.nextIndex = 0
             random.shuffle(self.bag)
+            print("reset!")
 
         return Tetrispiece(self.gm, nextShape)
 

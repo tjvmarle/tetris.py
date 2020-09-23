@@ -40,9 +40,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key in keyBlock:
+                gm.move(event.key)
                 #TODO: add left, right and space to tetrispieces
                 # Space == moveDown until collision
-                pass
             elif event.key == pygame.K_ESCAPE:
                 running = False
 

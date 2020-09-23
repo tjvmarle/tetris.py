@@ -1,7 +1,6 @@
 import pygame
 from lib.GameLogic.Gridblock import Gridblock
 from lib.GameLogic.Gridblock import Blockstatus
-from lib.GameLogic.Tetrispiece import Movement
 from lib.GameLogic.PieceManager import PieceManager
 
 
@@ -39,6 +38,7 @@ class Gamemanager:
             block = self.blockList[block_x + x_pos][block_y + y_pos]
             block.Status(Blockstatus.passive)
         
+        #TODO: Check for filled lines
         self.active_piece = None
         self.insertNextPiece()
     
@@ -77,12 +77,16 @@ class Gamemanager:
 
         return False
 
+    def move(self, direction):
+        if self.active_piece:
+            self.active_piece.move(direction)
+
     def drawAll(self):
         self.drawPiece()
         self.grid.draw()  # Overlay the grid lines
 
     def tick(self):  # Not actual fps, equals the game's 'playing speed'
         if self.active_piece:
-            self.active_piece.move(Movement.down)
+            self.active_piece.move(pygame.K_DOWN)
         
         self.drawAll()
