@@ -1,12 +1,14 @@
 import pygame
 import time
+
+from pygame.event import wait
 from lib.GameLogic.FpsTimer import FpsTimer
 from lib.GameLogic.Grid import GridDrawer
 from lib.GameLogic.Gridmanager import Gamemanager
-from lib.GameLogic.Tetrispiece import Tetrispiece
-from lib.GameLogic.PieceManager import PieceManager
+# from lib.GameLogic.Tetrispiece import Tetrispiece
+# from lib.GameLogic.PieceManager import PieceManager
 
-from lib.GameItems.Block import Block
+# from lib.GameItems.Block import Block
 
 pygame.init()
 
@@ -44,11 +46,21 @@ while running:
             elif event.key == pygame.K_ESCAPE:
                 running = False
 
-    if cntr % 30 == 0:
-        gm.tick()
+    if cntr % 15 == 0:
+        running = gm.tick()
 
     screen.blit(grid.surface, (100, int(
         (screen_y - grid.surface.get_height())/2)))
     pygame.display.update()
 
-    fpsClock.endFrame()
+    if running:
+        fpsClock.endFrame()
+    else:
+        # Plays small game-over 'animation'
+        while(gm.gameOver()):
+            screen.blit(grid.surface, (100, int(
+                (screen_y - grid.surface.get_height())/2)))
+            pygame.display.update()
+
+
+time.sleep(1)

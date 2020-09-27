@@ -1,4 +1,5 @@
 import pygame
+import time
 from lib.GameLogic.Gridblock import Gridblock
 from lib.GameLogic.Gridblock import Blockstatus
 from lib.GameLogic.PieceManager import PieceManager
@@ -9,6 +10,7 @@ class Gamemanager:
 
     # Index the playing field
     # TODO: There was some kind of Python annotation syntax
+    # TODO: Could probably use some major refactoring. Clean up/delegate many of the implementations.
     def __getBlockList(self, x, y):
         grid = []
         squareX, squareY = self.grid.getBlockSize()
@@ -31,20 +33,33 @@ class Gamemanager:
         self.active_piece = None
         self.pm = PieceManager(self)
         self.insertNextPiece()
+        self.gameOverFlag = False
+
+    def gameOver(self):
+        for rowNr in range(len(self.blockList[0]) - 1, -1, -1):
+            block = None
+            for colNr in range(0, len(self.blockList)):
+                block = self.blockList[colNr][rowNr]
+
+                if block.status == Blockstatus.passive or block.status == Blockstatus.active:
+                    block.Status(Blockstatus.dead, (102, 102, 102))
+                    self.grid.draw()
+                    time.sleep(0.05)
+                    return True
+
+        return False  # All passive block turned dead
 
     def moveDownAbove(self, rowNr):
-        print("Cleaning from rowNr: ", rowNr)
-        # FIXME: Gets more and more wonky after clearing lines, even at the top. Maybe the indexing wraps around and messes up the block status.
-
-        for row in range(rowNr, 0, -1):  # This excludes the top line!
+        for row in range(rowNr, 0, -1):
             for colNr in range(0, len(self.blockList)):
                 aboveBlock = self.blockList[colNr][row - 1]
                 self.blockList[colNr][row].Status(
                     aboveBlock.status, aboveBlock.color)
 
+        # Top line can be done seperately
         for colnr in range(0, len(self.blockList)):
             rowBlock = self.blockList[colnr][0]
-            rowBlock.Status(Blockstatus.passive)
+            rowBlock.Status(Blockstatus.empty)
 
     def checkLine(self):
         for rowNr in range(0, len(self.blockList[0])):
@@ -72,13 +87,14 @@ class Gamemanager:
             block = self.blockList[block_x + x_pos][block_y + y_pos]
             block.Status(Blockstatus.passive)
 
-        # TODO: Check for filled lines to remove
-        self.active_piece = None
         self.checkLine()
+        # Check if this moves on the same tick() - could give some erratic behavior at the top
+        self.insertNextPiece()
 
     def insertNextPiece(self):
-        # TODO: Check for collision at insertion == game lost
         self.active_piece = self.pm.giveNextPiece()
+        if self.collides(self.active_piece, self.active_piece.pos):  # Game over
+            self.gameOverFlag = True
 
     # TODO: Delegate implementation to the piece itself
     def drawPiece(self, undraw=False):
@@ -120,17 +136,14 @@ class Gamemanager:
             self.grid.draw()  # Lazy but easy
 
     def drawAll(self):
-        # move(DOWN) from tick() could've disabled the piece without inserting a new one
-        if self.active_piece:
-            # TODO Find something more elegant here. Maybe insert new piece at deactivation
-            self.drawPiece()
-
+        self.drawPiece()
         self.grid.draw()  # Overlay the grid lines
 
     def tick(self):  # Not actual fps, equals the game's 'playing speed'
-        if self.active_piece:
-            self.active_piece.move(pygame.K_DOWN)
-        else:
-            self.insertNextPiece()
+        if self.gameOverFlag:
+            return False
 
+        self.active_piece.move(pygame.K_DOWN)
         self.drawAll()
+
+        return True

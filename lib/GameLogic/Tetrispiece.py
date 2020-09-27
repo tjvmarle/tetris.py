@@ -43,8 +43,6 @@ class Tetrispiece:
             self.gm.drawPiece(True)  # First 'undraw' the piece
             self.pos = (x_pos + x_dir, y_pos)
             self.gm.drawPiece()  # Redraw on next position
-        else:
-            print("Left/right collision!")
 
     def spin(self):
         prevShape = self.shape

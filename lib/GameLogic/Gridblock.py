@@ -7,10 +7,10 @@ class Blockstatus(Enum):
     empty = 0
     active = 1
     passive = 2
+    dead = 3
+
 
 # Keeps track of single block in the grid
-
-
 class Gridblock:
 
     def __init__(self, x_pos, y_pos, size, surface):
@@ -26,7 +26,7 @@ class Gridblock:
                                                     self.y_pos, self.size, self.size))
 
     def Status(self, status, color=None):
-        if self.status == status and self.color != color:
+        if self.status == status and self.color == color:  # Nothing to change
             return
 
         if status == Blockstatus.active and not color:
@@ -38,7 +38,8 @@ class Gridblock:
             if status == Blockstatus.empty:
                 # TODO: add background color to constructor
                 self.color = (0, 0, 0)
-            elif status == Blockstatus.passive:  # Only active and color-containing blocks should be able to turn passive
+            # Only active and color-containing blocks should be able to turn passive #Wrong!
+            elif status == Blockstatus.passive:
                 newRgb = []
                 for newClr in self.color:
                     newClr = newClr - 155 if newClr - 155 > 0 else 0
