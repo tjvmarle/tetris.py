@@ -32,6 +32,40 @@ class Gamemanager:
         self.pm = PieceManager(self)
         self.insertNextPiece()
 
+    def moveDownAbove(self, rowNr):
+        print("Cleaning from rowNr: ", rowNr)
+        # FIXME: Gets more and more wonky after clearing lines, even at the top. Maybe the indexing wraps around and messes up the block status.
+
+        for row in range(rowNr, 0, -1):  # This excludes the top line!
+            for colNr in range(0, len(self.blockList)):
+                aboveBlock = self.blockList[colNr][row - 1]
+                self.blockList[colNr][row].Status(
+                    aboveBlock.status, aboveBlock.color)
+
+        for colnr in range(0, len(self.blockList)):
+            rowBlock = self.blockList[colnr][0]
+            rowBlock.Status(Blockstatus.passive)
+
+    def checkLine(self):
+        for rowNr in range(0, len(self.blockList[0])):
+            clearRow = True
+
+            for colNr in range(0, len(self.blockList)):
+                rowBlock = self.blockList[colNr][rowNr]
+                if rowBlock.status != Blockstatus.passive:
+                    clearRow = False  # No use checking the rest of the line
+                    break
+
+            if not clearRow:
+                continue
+
+            for colNr in range(0, len(self.blockList)):
+                block = self.blockList[colNr][rowNr]
+                block.Status(Blockstatus.empty)
+
+            # Immediately move down all blocks above by one line. Waiting for clearing multiple lines at once can become quite complicated.
+            self.moveDownAbove(rowNr)
+
     def deactivatePiece(self, piece):
         x_pos, y_pos = piece.pos
         for block_x, block_y in piece.shape:
@@ -40,6 +74,7 @@ class Gamemanager:
 
         # TODO: Check for filled lines to remove
         self.active_piece = None
+        self.checkLine()
 
     def insertNextPiece(self):
         # TODO: Check for collision at insertion == game lost
