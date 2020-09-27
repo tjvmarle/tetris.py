@@ -4,7 +4,7 @@ from lib.GameLogic.FpsTimer import FpsTimer
 from lib.GameLogic.Grid import GridDrawer
 from lib.GameLogic.Gridmanager import Gamemanager
 from lib.GameLogic.Tetrispiece import Tetrispiece
-from lib.GameLogic.PieceManager import PieceManager 
+from lib.GameLogic.PieceManager import PieceManager
 
 from lib.GameItems.Block import Block
 
@@ -26,10 +26,10 @@ fpsClock = FpsTimer(time.time(), 60)  # running @ 60fps
 running = True
 cntr = 0
 
-keyBlock = {pygame.K_LEFT, pygame.K_RIGHT, pygame.K_DOWN, pygame.K_SPACE}
+keyBlock = {pygame.K_LEFT, pygame.K_RIGHT,
+            pygame.K_DOWN, pygame.K_SPACE, pygame.K_RCTRL}
 
 grid.surface.fill((0, 0, 0))
-gm.insertNextPiece()
 gm.drawAll()
 
 while running:
@@ -41,12 +41,10 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key in keyBlock:
                 gm.move(event.key)
-                #TODO: add left, right and space to tetrispieces
-                # Space == moveDown until collision
             elif event.key == pygame.K_ESCAPE:
                 running = False
 
-    if cntr % 10 == 0:
+    if cntr % 30 == 0:
         gm.tick()
 
     screen.blit(grid.surface, (100, int(
