@@ -6,11 +6,13 @@ from lib.GameLogic.PieceManager import PieceManager
 
 
 class Gamemanager:
+    bgColor = (0, 0, 0)
     # Manages the grid, the blocks, drawing and game logic
 
     # Index the playing field
     # TODO: There was some kind of Python annotation syntax
     # TODO: Could probably use some major refactoring. Clean up/delegate many of the implementations.
+    # TODO: Problably easier to change all colors to lists instead of tuples
     def __getBlockList(self, x, y):
         grid = []
         squareX, squareY = self.grid.getBlockSize()
@@ -20,7 +22,8 @@ class Gamemanager:
 
             for row in range(0, y):
                 rowList.append(
-                    Gridblock(column * squareX, row * squareY, squareX, self.grid.surface))
+                    Gridblock(column * squareX, row * squareY,
+                              squareX, self.grid.surface, Gamemanager.bgColor))
 
             grid.append(rowList)
 
