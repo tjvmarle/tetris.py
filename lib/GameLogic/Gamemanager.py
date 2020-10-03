@@ -13,6 +13,7 @@ class Gamemanager:
     # TODO: There was some kind of Python annotation syntax
     # TODO: Could probably use some major refactoring. Clean up/delegate many of the implementations.
     # TODO: Problably easier to change all colors to lists instead of tuples
+    # TODO: Maybe move this to a seperate class to manage the blocks on the playing field
     def __getBlockList(self, x, y):
         grid = []
         squareX, squareY = self.grid.getBlockSize()

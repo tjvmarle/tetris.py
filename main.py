@@ -57,7 +57,7 @@ while running:
     y_offset = int((screen_y - grid.surface.get_height())/2)
 
     screen.blit(grid.surface, (50, y_offset))
-    screen.blit(prevm.surface, (300, y_offset)) #TODO: Implement some surface manager to blit all the relevant surfaces
+    screen.blit(prevm.prevGrid.surface, (300, y_offset)) #TODO: Implement some surface manager to blit all the relevant surfaces
     pygame.display.update()
 
     if running:
