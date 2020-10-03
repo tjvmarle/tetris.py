@@ -8,6 +8,7 @@ class GridDrawer:
     def __init__(self, x_squares, y_squares, square_size, line_thickness, line_color):
         self.surface = pygame.Surface(
             (x_squares * square_size + line_thickness, y_squares * square_size + line_thickness))
+        self.surface.fill((0,0,0))
         self.line_thick = line_thickness
         self.line_clr = line_color
         self.block_size = square_size

@@ -4,11 +4,13 @@ import time
 from pygame.event import wait
 from lib.GameLogic.FpsTimer import FpsTimer
 from lib.GameLogic.Grid import GridDrawer
-from lib.GameLogic.Gridmanager import Gamemanager
-# from lib.GameLogic.Tetrispiece import Tetrispiece
-# from lib.GameLogic.PieceManager import PieceManager
+from lib.GameLogic.Gamemanager import Gamemanager
+from lib.GameLogic.PreviewManager import PreviewManager
 
-# from lib.GameItems.Block import Block
+#TODO: 
+# Refactor structure
+# Maybe seperate logic and surface management --> easier to blit a single list later
+# Simplify de Gamemanager, delegate more to other classes
 
 pygame.init()
 
@@ -25,13 +27,16 @@ grid = GridDrawer(10, 20, 20, 1, (51, 51, 51))
 gm = Gamemanager(grid)
 fpsClock = FpsTimer(time.time(), 60)  # running @ 60fps
 
+previewSurface = pygame.Surface((150, 300))
+prevm = PreviewManager(previewSurface, gm.pm)
+
 running = True
 cntr = 0
 
 keyBlock = {pygame.K_LEFT, pygame.K_RIGHT,
             pygame.K_DOWN, pygame.K_SPACE, pygame.K_RCTRL}
 
-grid.surface.fill((0, 0, 0))
+# grid.surface.fill((0, 0, 0))
 gm.drawAll()
 
 while running:
@@ -49,8 +54,10 @@ while running:
     if cntr % 15 == 0:
         running = gm.tick()
 
-    screen.blit(grid.surface, (100, int(
-        (screen_y - grid.surface.get_height())/2)))
+    y_offset = int((screen_y - grid.surface.get_height())/2)
+
+    screen.blit(grid.surface, (50, y_offset))
+    screen.blit(prevm.surface, (300, y_offset)) #TODO: Implement some surface manager to blit all the relevant surfaces
     pygame.display.update()
 
     if running:
@@ -58,8 +65,7 @@ while running:
     else:
         # Plays small game-over 'animation'
         while(gm.gameOver()):
-            screen.blit(grid.surface, (100, int(
-                (screen_y - grid.surface.get_height())/2)))
+            screen.blit(grid.surface, (50, y_offset))
             pygame.display.update()
 
 
