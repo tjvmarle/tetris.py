@@ -7,7 +7,7 @@ from lib.GameLogic.Grid import GridDrawer
 from lib.GameLogic.Gamemanager import Gamemanager
 from lib.GameLogic.PreviewManager import PreviewManager
 
-#TODO: 
+# TODO:
 # Refactor structure
 # Maybe seperate logic and surface management --> easier to blit a single list later
 # Simplify de Gamemanager, delegate more to other classes
@@ -29,6 +29,7 @@ fpsClock = FpsTimer(time.time(), 60)  # running @ 60fps
 
 previewSurface = pygame.Surface((150, 300))
 prevm = PreviewManager(previewSurface, gm.pm)
+gm.prevManager = prevm
 
 running = True
 cntr = 0
@@ -57,7 +58,8 @@ while running:
     y_offset = int((screen_y - grid.surface.get_height())/2)
 
     screen.blit(grid.surface, (50, y_offset))
-    screen.blit(prevm.prevGrid.surface, (300, y_offset)) #TODO: Implement some surface manager to blit all the relevant surfaces
+    # TODO: Implement some surface manager to blit all the relevant surfaces
+    screen.blit(prevm.prevGrid.surface, (300, y_offset))
     pygame.display.update()
 
     if running:

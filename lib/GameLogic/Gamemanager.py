@@ -38,6 +38,7 @@ class Gamemanager:
         self.pm = PieceManager(self)
         self.insertNextPiece()
         self.gameOverFlag = False
+        self.prevManager = None
 
     def gameOver(self):
         for rowNr in range(len(self.blockList[0]) - 1, -1, -1):
